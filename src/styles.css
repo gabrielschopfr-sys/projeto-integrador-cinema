@@ -267,3 +267,45 @@ th, td {
   }
   .hero h1 { font-size: 1.8rem; }
 }
+body {
+  background: #f5f6fa;
+}
+
+.hero {
+  border-radius: 24px;
+  padding: 60px 30px;
+  margin: 30px auto;
+  max-width: 1100px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+}
+
+.card {
+  border-radius: 18px;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22);
+}
+
+.card img {
+  height: 230px;
+}
+
+button,
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.filters input,
+.filters select {
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.navbar {
+  backdrop-filter: blur(10px);
+}
