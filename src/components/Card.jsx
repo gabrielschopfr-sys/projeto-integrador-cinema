@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useFavoritos } from '../context/FavoritosContext'
 
 export default function Card({ filme }) {
@@ -8,7 +8,14 @@ export default function Card({ filme }) {
 
   return (
     <article className="card">
-      <img src={filme.imagem} alt={`Cartaz do filme ${filme.titulo}`} loading="lazy" />
+<Link to={`/filme/${filme.id}`}>
+  <img
+    src={filme.imagem}
+    alt={`Cartaz do filme ${filme.titulo}`}
+    loading="lazy"
+    style={{ cursor: 'pointer' }}
+  />
+</Link>
       <div className="card-body">
         <button className="heart" onClick={() => alternarFavorito(filme.id)} aria-label="Favoritar filme">
           {favorito ? '❤️' : '🤍'}
