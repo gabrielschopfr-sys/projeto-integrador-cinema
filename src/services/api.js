@@ -2,6 +2,11 @@ import { filmes } from '../data'
 
 const API_KEY = '1c3153bf029ab488c66d55a2b708bf37'
 
+function getFilmesLocais() {
+  const filmesSalvos = localStorage.getItem('filmes')
+  return filmesSalvos ? JSON.parse(filmesSalvos) : filmes
+}
+
 function converterCategoriasTMDB(genreIds = []) {
   const mapa = {
     28: 'Ação',
@@ -43,36 +48,39 @@ function converterFilmeTMDB(filme) {
 }
 
 export async function buscarFilmes() {
+  const filmesLocais = getFilmesLocais()
+
   try {
     const resposta = await fetch(
       `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=pt-BR&page=1`
     )
 
-   const dados = await resposta.json()
+    const dados = await resposta.json()
 
+    if (!dados.results) {
+      return filmesLocais
+    }
 
-if (!dados.results) {
-  return filmes
-}
+    const filmesTMDB = dados.results
+      .filter(filme =>
+        filme.title &&
+        filme.poster_path &&
+        filme.overview &&
+        /^[A-Za-zÀ-ÿ0-9\s:,.!?'"()-]+$/.test(filme.title)
+      )
+      .map(converterFilmeTMDB)
 
-const filmesTMDB = dados.results
-  .filter(filme =>
-    filme.title &&
-    filme.poster_path &&
-    filme.overview &&
-    /^[A-Za-zÀ-ÿ0-9\s:,.!?'"()-]+$/.test(filme.title)
-  )
-  .map(converterFilmeTMDB)
-
-    return [...filmes, ...filmesTMDB]
+    return [...filmesLocais, ...filmesTMDB]
   } catch (erro) {
     console.error('Erro ao buscar TMDB:', erro)
-    return filmes
+    return filmesLocais
   }
 }
 
 export async function buscarFilmePorId(id) {
-  const filmeLocal = filmes.find(filme => filme.id === id)
+  const filmesLocais = getFilmesLocais()
+
+  const filmeLocal = filmesLocais.find(filme => filme.id === id)
 
   if (filmeLocal) {
     return filmeLocal
