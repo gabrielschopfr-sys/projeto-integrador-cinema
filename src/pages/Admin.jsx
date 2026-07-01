@@ -1,9 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+useEffect(() => {
+  localStorage.setItem('filmes', JSON.stringify(itens))
+}, [itens])
 import { filmes } from '../data'
 
 export default function Admin() {
-  const [itens, setItens] = useState(filmes)
+const [itens, setItens] = useState(() => {
+  const salvo = localStorage.getItem('filmes')
+  return salvo ? JSON.parse(salvo) : filmes
+})
   const [titulo, setTitulo] = useState('')
   const navigate = useNavigate()
 
