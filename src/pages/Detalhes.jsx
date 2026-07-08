@@ -44,8 +44,13 @@ const relacionados = filmes
   .slice(0, 3)
   return (
     <section>
-      <p className="breadcrumb"><Link to="/">Home</Link> › {filme.categoria} › {filme.titulo}</p>
-
+<p className="breadcrumb">
+  <Link to="/">Home</Link> › {
+    Array.isArray(filme.categoria)
+      ? filme.categoria.join(' • ')
+      : filme.categoria
+  } › {filme.titulo}
+</p>
       <div className="details">
         <div>
           <img className="details-img" src={filme.imagem} alt={`Imagem do filme ${filme.titulo}`} />
