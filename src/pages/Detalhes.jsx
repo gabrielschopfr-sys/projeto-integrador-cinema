@@ -24,8 +24,24 @@ export default function Detalhes() {
   if (carregando) return <LoadingSpinner />
   if (!filme) return <h1>Filme não encontrado</h1>
 
-  const relacionados = filmes.filter(item => item.categoria === filme.categoria && item.id !== filme.id).slice(0, 3)
-
+const relacionados = filmes
+  .filter(item =>
+    item.id !== filme.id &&
+    (
+      Array.isArray(item.categoria)
+        ? item.categoria.some(cat =>
+            Array.isArray(filme.categoria)
+              ? filme.categoria.includes(cat)
+              : cat === filme.categoria
+          )
+        : (
+            Array.isArray(filme.categoria)
+              ? filme.categoria.includes(item.categoria)
+              : item.categoria === filme.categoria
+          )
+    )
+  )
+  .slice(0, 3)
   return (
     <section>
       <p className="breadcrumb"><Link to="/">Home</Link> › {filme.categoria} › {filme.titulo}</p>
@@ -39,13 +55,19 @@ export default function Detalhes() {
           </div>
         </div>
         <div>
-          <span className="badge">{filme.categoria}</span>
+          <span className="badge">
+          {Array.isArray(filme.categoria)
+           ? filme.categoria.join(' • ')
+           : filme.categoria}
+          </span>
           <h1>{filme.titulo}</h1>
           <p>⭐ {filme.avaliacao} • {filme.ano} • {filme.duracao}</p>
           <p>{filme.descricao}</p>
           <h3>Sessões disponíveis</h3>
           <p>{filme.sessoes.join(' • ')}</p>
-          <button className="primary">Reservar ingresso</button>
+         <Link className="btn primary" to={`/reservar/${filme.id}`}>
+            Reservar ingresso
+          </Link>
         </div>
       </div>
 
