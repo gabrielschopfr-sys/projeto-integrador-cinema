@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { filmes } from '../data'
 
@@ -50,6 +49,23 @@ export default function Admin() {
     localStorage.setItem('categorias', JSON.stringify(categorias))
   }, [categorias])
 
+  const totalFilmes = itens.length
+  const totalCategorias = categorias.length
+  const filmesNacionais = itens.filter(item =>
+    Array.isArray(item.categoria)
+      ? item.categoria.includes('Nacional')
+      : item.categoria === 'Nacional'
+  ).length
+  const filmesLgbt = itens.filter(item =>
+    Array.isArray(item.categoria)
+      ? item.categoria.includes('LGBTQIA+')
+      : item.categoria === 'LGBTQIA+'
+  ).length
+  const mediaAvaliacoes = totalFilmes
+    ? (itens.reduce((soma, item) => soma + Number(item.avaliacao || 0), 0) / totalFilmes).toFixed(1)
+    : '0.0'
+  const totalReservas = JSON.parse(localStorage.getItem('reservas'))?.length || 0
+
   function atualizarCampo(campo, valor) {
     setForm({ ...form, [campo]: valor })
   }
@@ -67,7 +83,6 @@ export default function Admin() {
 
   function adicionarCategoria() {
     const nome = novaCategoria.trim()
-
     if (!nome) return
 
     if (!categorias.includes(nome)) {
@@ -75,10 +90,7 @@ export default function Admin() {
     }
 
     if (!form.categoria.includes(nome)) {
-      setForm({
-        ...form,
-        categoria: [...form.categoria, nome]
-      })
+      setForm({ ...form, categoria: [...form.categoria, nome] })
     }
 
     setNovaCategoria('')
@@ -107,9 +119,7 @@ export default function Admin() {
     }
 
     if (editando) {
-      setItens(itens.map(item =>
-        item.id === form.id ? filmeSalvo : item
-      ))
+      setItens(itens.map(item => item.id === form.id ? filmeSalvo : item))
     } else {
       setItens([...itens, filmeSalvo])
     }
@@ -121,12 +131,8 @@ export default function Admin() {
   function editar(item) {
     setForm({
       ...item,
-      categoria: Array.isArray(item.categoria)
-        ? item.categoria
-        : [item.categoria],
-      sessoes: Array.isArray(item.sessoes)
-        ? item.sessoes
-        : ['14:00', '17:00', '20:00']
+      categoria: Array.isArray(item.categoria) ? item.categoria : [item.categoria],
+      sessoes: Array.isArray(item.sessoes) ? item.sessoes : ['14:00', '17:00', '20:00']
     })
 
     setEditando(true)
@@ -152,36 +158,53 @@ export default function Admin() {
       <aside className="sidebar">
         <strong>AdminPro</strong>
         <a href="#dashboard">Dashboard</a>
-         <a href="#formulario">Cadastrar filme</a>
-         <a href="#itens">Gerenciar filmes</a>
-        </aside>
+        <a href="#formulario">Cadastrar filme</a>
+        <a href="#itens">Gerenciar filmes</a>
+      </aside>
 
       <div className="admin-content">
         <h1>Painel Administrativo</h1>
 
-        <h2 id="dashboard">Dashboard</h2>
+        <div id="dashboard">
+          <h2>Dashboard</h2>
 
-      <div className="dashboard-cards">
-  <div>
-    <strong>{itens.length}</strong>
-    <span>Filmes cadastrados</span>
-  </div>
+          <div className="dashboard-cards">
+            <div className="dashboard-card">
+              <h3>{totalFilmes}</h3>
+              <p>🎬 Filmes cadastrados</p>
+            </div>
 
-  <div>
-    <strong>{categorias.length}</strong>
-    <span>Categorias</span>
-  </div>
+            <div className="dashboard-card">
+              <h3>{totalCategorias}</h3>
+              <p>🏷 Categorias</p>
+            </div>
 
-  <div>
-    <strong>
-      {itens.filter(item => item.categoria?.includes?.('Nacional')).length}
-    </strong>
-    <span>Filmes nacionais</span>
-  </div>
-</div>
-<h2 id="formulario">Cadastrar filme</h2>
-<form className="admin-form" onSubmit={salvar}>
-            <input
+            <div className="dashboard-card">
+              <h3>{filmesNacionais}</h3>
+              <p>🇧🇷 Filmes nacionais</p>
+            </div>
+
+            <div className="dashboard-card">
+              <h3>{filmesLgbt}</h3>
+              <p>🏳️‍🌈 Filmes LGBTQIA+</p>
+            </div>
+
+            <div className="dashboard-card">
+              <h3>{mediaAvaliacoes}</h3>
+              <p>⭐ Média das avaliações</p>
+            </div>
+
+            <div className="dashboard-card">
+              <h3>{totalReservas}</h3>
+              <p>🎟 Reservas</p>
+            </div>
+          </div>
+        </div>
+
+        <h2 id="formulario">Cadastrar filme</h2>
+
+        <form className="admin-form" onSubmit={salvar}>
+          <input
             value={form.titulo}
             onChange={e => atualizarCampo('titulo', e.target.value)}
             placeholder="Título do filme"
@@ -200,14 +223,14 @@ export default function Admin() {
           />
 
           <input
-             type="number"
-             min="0"
-              max="5"
-               step="0.1"
-                value={form.avaliacao}
-                placeholder="Avaliação (0 a 5)"
-               onChange={e => atualizarCampo('avaliacao', e.target.value)}
-              />
+            type="number"
+            min="0"
+            max="5"
+            step="0.1"
+            value={form.avaliacao}
+            placeholder="Avaliação (0 a 5)"
+            onChange={e => atualizarCampo('avaliacao', e.target.value)}
+          />
 
           <input
             type="number"
