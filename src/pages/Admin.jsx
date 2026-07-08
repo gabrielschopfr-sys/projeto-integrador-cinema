@@ -159,7 +159,9 @@ export default function Admin() {
       <div className="admin-content">
         <h1>Painel Administrativo</h1>
 
-        <div id="dashboard" className="dashboard-cards">
+        <h2 id="dashboard">Dashboard</h2>
+
+      <div className="dashboard-cards">
   <div>
     <strong>{itens.length}</strong>
     <span>Filmes cadastrados</span>
