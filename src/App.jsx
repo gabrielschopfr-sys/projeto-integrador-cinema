@@ -10,6 +10,7 @@ import Favoritos from './pages/Favoritos'
 import Admin from './pages/Admin'
 import AdminEditar from './pages/AdminEditar'
 import NotFound from './pages/NotFound'
+import Reserva from './pages/Reserva'
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
           <Route path="/admin/editar/:id" element={<ProtectedRoute><AdminEditar /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/reservar/:id" element={<Reserva />} />
         </Routes>
       </main>
       <Footer />
