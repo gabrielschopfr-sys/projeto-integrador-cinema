@@ -309,3 +309,33 @@ button,
 .navbar {
   backdrop-filter: blur(10px);
 }
+.tela-cinema {
+  background: #111827;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  margin: 20px auto;
+  max-width: 420px;
+  border-radius: 12px;
+  letter-spacing: 4px;
+}
+
+.mapa-assentos {
+  display: grid;
+  grid-template-columns: repeat(6, 50px);
+  gap: 12px;
+  justify-content: center;
+  margin: 25px 0;
+}
+
+.assento {
+  background: #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: bold;
+}
+
+.assento.selecionado {
+  background: #e11d48;
+  color: white;
+}
