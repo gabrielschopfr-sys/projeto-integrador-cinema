@@ -151,15 +151,35 @@ export default function Admin() {
     <section className="admin-layout">
       <aside className="sidebar">
         <strong>AdminPro</strong>
-        <Link to="/">Dashboard</Link>
-        <Link to="/admin">Itens</Link>
-      </aside>
+        <a href="#dashboard">Dashboard</a>
+         <a href="#formulario">Cadastrar filme</a>
+         <a href="#itens">Gerenciar filmes</a>
+        </aside>
 
       <div className="admin-content">
         <h1>Painel Administrativo</h1>
 
-        <form className="admin-form" onSubmit={salvar}>
-          <input
+        <div id="dashboard" className="dashboard-cards">
+  <div>
+    <strong>{itens.length}</strong>
+    <span>Filmes cadastrados</span>
+  </div>
+
+  <div>
+    <strong>{categorias.length}</strong>
+    <span>Categorias</span>
+  </div>
+
+  <div>
+    <strong>
+      {itens.filter(item => item.categoria?.includes?.('Nacional')).length}
+    </strong>
+    <span>Filmes nacionais</span>
+  </div>
+</div>
+<h2 id="formulario">Cadastrar filme</h2>
+<form className="admin-form" onSubmit={salvar}>
+            <input
             value={form.titulo}
             onChange={e => atualizarCampo('titulo', e.target.value)}
             placeholder="Título do filme"
@@ -253,6 +273,8 @@ export default function Admin() {
             🔄 Restaurar catálogo original
           </button>
         </form>
+
+        <h2 id="itens">Gerenciar filmes</h2>
 
         <table>
           <thead>
